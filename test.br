@@ -1,0 +1,18 @@
+func main() : void {
+    var first: bool;
+    var second: bool;
+    var third: bool;
+
+    first = true;
+    print(first || sfunc() || tfunc() || first);
+}
+
+func sfunc() : bool {
+    print("second running");
+    return true;
+}
+
+func tfunc() : bool {
+    print("third running");
+    return true;
+}
