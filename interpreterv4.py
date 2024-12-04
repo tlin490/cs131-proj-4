@@ -136,6 +136,33 @@ class Interpreter(InterpreterBase):
             return self.run_expr(expr)
         return None
 
+    def do_try(self, statement):
+        print(statement)
+        
+        res = self.run_statements(statement.dict.get("statements"))
+        
+        #print("found raise: ", res[0])
+        for catcher in statement.get("catchers"):
+            if res[0] == catcher.get("exception_type"):
+                self.run_statements(catcher.get("statements"))
+                break
+        #raise will always need to be a string
+
+
+
+        return
+
+    def do_raise(self, statement):
+        val = self.run_expr(statement.get("exception_type"))
+        
+        #raise
+        if type(val) != str:
+            super().error(ErrorType.TYPE_ERROR, 'raise must be a string')
+            
+        #catch
+        
+        return val
+    
     def run_statements(self, statements):
         res, ret = None, False
 
@@ -156,6 +183,12 @@ class Interpreter(InterpreterBase):
                 if ret: break
             elif kind == 'return': #lazy here
                 res = self.run_return(statement)
+                ret = True
+                break
+            elif kind == 'try':
+                self.do_try(statement)
+            elif kind == 'raise':
+                res = self.do_raise(statement)
                 ret = True
                 break
 
@@ -189,7 +222,7 @@ class Interpreter(InterpreterBase):
                 return False
             if (kind == '||') & (l == True):
                 return True
-            
+
             r = self.run_expr(expr.get('op2'))
             tl, tr = type(l), type(r)
 

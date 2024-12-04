@@ -2,9 +2,23 @@ func main() : void {
     var first: bool;
     var second: bool;
     var third: bool;
+    var excp: string;
+
+    excp = "poop";
 
     first = true;
     print(first || sfunc() || tfunc() || first);
+
+    try {
+        raise "a";
+        print("hi");
+    }
+    catch "a" {
+        print("a caught");
+    }
+    catch "poop" {
+        print("caught poop");
+    }
 }
 
 func sfunc() : bool {
